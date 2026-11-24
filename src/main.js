@@ -87,7 +87,7 @@ function renderEmergencyPage(data) {
     ['Autre information', data.x],
   ].filter(([, value]) => value)
   const mapUrl = 'https://www.google.com/maps/search/urgences+et+médecins+à+proximité'
-  app.innerHTML = `<style>.emergency-page{max-width:760px;min-height:100vh;margin:auto;padding:28px 24px 56px}.emergency-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px}.emergency-label{color:#85877f;font-size:12px;font-weight:700;letter-spacing:1.3px}.emergency-card{padding:clamp(24px,6vw,52px);border:1px solid #e9e8e1;border-radius:20px;background:#fffefa;box-shadow:0 16px 50px rgba(40,49,44,.06)}.emergency-card h1{margin:18px 0 12px;font:700 clamp(36px,8vw,54px)/1.08 'Commissioner',sans-serif;letter-spacing:-2px;overflow-wrap:anywhere}.emergency-meta{display:flex;flex-wrap:wrap;gap:10px;color:#647064}.emergency-meta span{padding:8px 12px;border-radius:20px;background:#f2f1eb}.emergency-meta strong{color:#28312c}.emergency-section{margin-top:34px}.emergency-section h2{margin:0 0 14px;font:700 18px 'Commissioner',sans-serif}.emergency-section dl{margin:0}.emergency-section dl div{padding:14px 0;border-top:1px solid #e9e8e1}.emergency-section dt{margin-bottom:5px;color:#85877f;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}.emergency-section dd{margin:0;line-height:1.6;overflow-wrap:anywhere}.emergency-contact{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-top:1px solid #e9e8e1}.emergency-contact div,.emergency-doctor{display:grid;gap:5px}.emergency-contact div span{color:#85877f;font-size:14px}.emergency-contact a,.emergency-doctor a{color:#176b70;font-weight:700;overflow-wrap:anywhere}.emergency-contact a{padding:10px 14px;border-radius:10px;background:#e4f3f1;white-space:nowrap}.emergency-doctor{padding-top:14px;border-top:1px solid #e9e8e1}.emergency-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px}.emergency-action{display:flex;min-height:52px;align-items:center;justify-content:center;padding:12px 16px;border-radius:12px;font-weight:700;text-align:center}.emergency-call{background:#df493b;color:#fff}.emergency-map{border:1px solid #e9e8e1;background:#f6f5f1;color:#28312c}.emergency-map-note{margin:10px 0 0;color:#85877f;font-size:14px;line-height:1.5}.emergency-foot{margin:34px 0 0;color:#85877f;font-size:14px;line-height:1.6}@media(max-width:480px){.emergency-page{padding:20px 14px 36px}.emergency-header{margin-bottom:28px}.emergency-card{border-radius:16px}.emergency-contact{align-items:flex-start;flex-direction:column}.emergency-contact a{max-width:100%;white-space:normal}.emergency-actions{grid-template-columns:1fr}}</style><main class="emergency-page"><header class="emergency-header"><a class="brand" href="./"><img class="brand-logo" src="${logoUrl}" alt="QRgence" /></a><span class="emergency-label">CARTE D'URGENCE</span></header><section class="emergency-card"><div class="eyebrow"><span class="eyebrow-line"></span> INFORMATIONS MÉDICALES</div><h1>${escapeHtml(data.n)}</h1><div class="emergency-meta">${data.a ? `<span>${escapeHtml(data.a)} ans</span>` : ''}<span>Groupe sanguin <strong>${escapeHtml(data.b || 'Non renseigné')}</strong></span></div>${health.length ? `<section class="emergency-section"><h2>À savoir</h2><dl>${health.map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl></section>` : ''}<section class="emergency-section emergency-contacts"><h2>Contacts à prévenir</h2>${data.e.map(contact => `<article class="emergency-contact"><div><strong>${escapeHtml(contact.n || 'Contact d’urgence')}</strong>${contact.r ? `<span>${escapeHtml(contact.r)}</span>` : ''}</div><a href="${escapeHtml(phoneHref(contact.p))}">${escapeHtml(contact.p)}</a></article>`).join('')}</section>${data.d ? `<section class="emergency-section"><h2>Médecin</h2><div class="emergency-doctor"><strong>${escapeHtml(data.d)}</strong>${data.dp ? `<a href="${escapeHtml(phoneHref(data.dp))}">${escapeHtml(data.dp)}</a>` : ''}</div></section>` : ''}<div class="emergency-actions"><a class="emergency-action emergency-call" href="tel:112">Appeler les urgences · 112</a><a class="emergency-action emergency-map" href="${mapUrl}" target="_blank" rel="noopener noreferrer">Urgences et médecins à proximité</a></div><p class="emergency-map-note">La carte utilise votre position si vous l’autorisez dans votre navigateur.</p><p class="emergency-foot">Ces informations sont fournies par la personne porteuse de cette carte.</p></section></main>`
+  app.innerHTML = `<style>.emergency-page{max-width:760px;min-height:100vh;margin:auto;padding:28px 24px 56px}.emergency-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px}.emergency-label{color:#85877f;font-size:12px;font-weight:700;letter-spacing:1.3px}.emergency-card{padding:clamp(24px,6vw,52px);border:1px solid #e9e8e1;border-radius:20px;background:#fffefa;box-shadow:0 16px 50px rgba(40,49,44,.06)}.emergency-card h1{margin:18px 0 12px;font:700 clamp(36px,8vw,54px)/1.08 'Commissioner';letter-spacing:-2px;overflow-wrap:anywhere}.emergency-meta{display:flex;flex-wrap:wrap;gap:10px;color:#647064}.emergency-meta span{padding:8px 12px;border-radius:20px;background:#f2f1eb}.emergency-meta strong{color:#28312c}.emergency-section{margin-top:34px}.emergency-section h2{margin:0 0 14px;font:700 18px 'Commissioner'}.emergency-section dl{margin:0}.emergency-section dl div{padding:14px 0;border-top:1px solid #e9e8e1}.emergency-section dt{margin-bottom:5px;color:#85877f;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}.emergency-section dd{margin:0;line-height:1.6;overflow-wrap:anywhere}.emergency-contact{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-top:1px solid #e9e8e1}.emergency-contact div,.emergency-doctor{display:grid;gap:5px}.emergency-contact div span{color:#85877f;font-size:14px}.emergency-contact a,.emergency-doctor a{color:#176b70;font-weight:700;overflow-wrap:anywhere}.emergency-contact a{padding:10px 14px;border-radius:10px;background:#e4f3f1;white-space:nowrap}.emergency-doctor{padding-top:14px;border-top:1px solid #e9e8e1}.emergency-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px}.emergency-action{display:flex;min-height:52px;align-items:center;justify-content:center;padding:12px 16px;border-radius:12px;font-weight:700;text-align:center}.emergency-call{background:#df493b;color:#fff}.emergency-map{border:1px solid #e9e8e1;background:#f6f5f1;color:#28312c}.emergency-map-note{margin:10px 0 0;color:#85877f;font-size:14px;line-height:1.5}.emergency-foot{margin:34px 0 0;color:#85877f;font-size:14px;line-height:1.6}@media(max-width:480px){.emergency-page{padding:20px 14px 36px}.emergency-header{margin-bottom:28px}.emergency-card{border-radius:16px}.emergency-contact{align-items:flex-start;flex-direction:column}.emergency-contact a{max-width:100%;white-space:normal}.emergency-actions{grid-template-columns:1fr}}</style><main class="emergency-page"><header class="emergency-header"><a class="brand" href="./"><img class="brand-logo" src="${logoUrl}" alt="QRgence" /></a><span class="emergency-label">CARTE D'URGENCE</span></header><section class="emergency-card"><div class="eyebrow"><span class="eyebrow-line"></span> INFORMATIONS MÉDICALES</div><h1>${escapeHtml(data.n)}</h1><div class="emergency-meta">${data.a ? `<span>${escapeHtml(data.a)} ans</span>` : ''}<span>Groupe sanguin <strong>${escapeHtml(data.b || 'Non renseigné')}</strong></span></div>${health.length ? `<section class="emergency-section"><h2>À savoir</h2><dl>${health.map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl></section>` : ''}<section class="emergency-section emergency-contacts"><h2>Contacts à prévenir</h2>${data.e.map(contact => `<article class="emergency-contact"><div><strong>${escapeHtml(contact.n || 'Contact d’urgence')}</strong>${contact.r ? `<span>${escapeHtml(contact.r)}</span>` : ''}</div><a href="${escapeHtml(phoneHref(contact.p))}">${escapeHtml(contact.p)}</a></article>`).join('')}</section>${data.d ? `<section class="emergency-section"><h2>Médecin</h2><div class="emergency-doctor"><strong>${escapeHtml(data.d)}</strong>${data.dp ? `<a href="${escapeHtml(phoneHref(data.dp))}">${escapeHtml(data.dp)}</a>` : ''}</div></section>` : ''}<div class="emergency-actions"><a class="emergency-action emergency-call" href="tel:112">Appeler les urgences · 112</a><a class="emergency-action emergency-map" href="${mapUrl}" target="_blank" rel="noopener noreferrer">Urgences et médecins à proximité</a></div><p class="emergency-map-note">La carte utilise votre position si vous l’autorisez dans votre navigateur.</p><p class="emergency-foot">Ces informations sont fournies par la personne porteuse de cette carte.</p></section></main>`
 }
 
 function input(label, key, placeholder = '', type = 'text') {
@@ -244,6 +244,7 @@ async function downloadCard() {
   const image = new Image()
   image.src = state.qr
   await image.decode()
+  await document.fonts.ready
   const canvas = document.createElement('canvas')
   canvas.width = 1000
   canvas.height = 630
@@ -251,28 +252,28 @@ async function downloadCard() {
   ctx.fillStyle = theme.bg
   ctx.fillRect(0, 0, canvas.width, canvas.height)
   ctx.fillStyle = theme.ink
-  ctx.font = '700 27px Arial'
+  ctx.font = '700 27px Commissioner'
   ctx.fillText('POCHE  ·  CARTE D’URGENCE', 64, 72)
   ctx.fillStyle = theme.light
-  ctx.font = '500 27px Arial'
+  ctx.font = '500 27px Commissioner'
   ctx.fillText('En cas d’urgence, je m’appelle', 64, 166)
   ctx.fillStyle = '#fff'
-  ctx.font = '700 67px Arial'
+  ctx.font = '700 67px Commissioner'
   ctx.fillText(data.name, 64, 245, 660)
   ctx.fillStyle = 'rgba(255,255,255,.35)'
   ctx.fillRect(64, 280, 872, 2)
   ctx.fillStyle = theme.ink
-  ctx.font = '700 20px Arial'
+  ctx.font = '700 20px Commissioner'
   ctx.fillText('GROUPE SANGUIN', 64, 337)
-  ctx.font = '700 45px Arial'
+  ctx.font = '700 45px Commissioner'
   ctx.fillText(data.blood || '—', 64, 392)
-  ctx.font = '600 24px Arial'
+  ctx.font = '600 24px Commissioner'
   ctx.fillText(`À PRÉVENIR  ·  ${data.contact.name || 'Contact d’urgence'}`, 64, 462, 600)
-  ctx.font = '500 24px Arial'
+  ctx.font = '500 24px Commissioner'
   ctx.fillText(data.contact.phone, 64, 502)
   ctx.drawImage(image, 742, 320, 184, 184)
   ctx.fillStyle = '#fff'
-  ctx.font = '700 17px Arial'
+  ctx.font = '700 17px Commissioner'
   ctx.fillText('SI JE NE PEUX PAS PARLER, SCANNEZ ICI', 64, 580)
   const link = document.createElement('a')
   link.download = `carte-urgence-${data.name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-')}.png`
