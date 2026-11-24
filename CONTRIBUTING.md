@@ -6,7 +6,7 @@ Merci de contribuer à QRgence. Les changements doivent préserver le fonctionne
 
 1. Ouvrez une issue ou une pull request en décrivant le besoin et la solution.
 2. N’ajoutez jamais de données médicales ou personnelles réelles dans les issues, captures d’écran, tests ou commits.
-3. Gardez l’application statique et évitez les services tiers, analytics, cookies, stockage navigateur ou API recevant des données saisies.
+3. Gardez l’application statique et n’ajoutez pas de services tiers, analytics, cookies, stockage navigateur ou API recevant des données saisies sans documenter leur impact sur la confidentialité. Google Fonts est l’unique ressource tierce autorisée pour la police Commissioner.
 4. Exécutez `npm ci` puis `npm run build` avant de soumettre une pull request.
 5. Expliquez toute nouvelle requête réseau et démontrez qu’aucune donnée saisie ne peut y être incluse.
 

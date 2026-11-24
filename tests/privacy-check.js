@@ -7,7 +7,11 @@ const packageJson = JSON.parse(await readFile(new URL('../package.json', import.
 
 assert.deepEqual(Object.keys(packageJson.dependencies), ['qrcode'])
 assert.match(html, /connect-src 'none'/)
-assert.doesNotMatch(html, /https?:\/\//)
+assert.match(html, /Commissioner:wght@400;500;600;700;800/)
+assert.match(await readFile(new URL('../src/style.css', import.meta.url), 'utf8'), /font-family:'Commissioner'/)
+assert.match(html, /fonts\.googleapis\.com/)
+assert.match(html, /fonts\.gstatic\.com/)
+assert.doesNotMatch(html, /https?:\/\/(?!fonts\.googleapis\.com|fonts\.gstatic\.com)/)
 assert.doesNotMatch(source, /\bfetch\s*\(|XMLHttpRequest|sendBeacon|localStorage|sessionStorage|indexedDB|document\.cookie|gtag|analytics|telemetry/)
 assert.match(source, /QRCode\.toDataURL\(qrUrl/)
 assert.match(source, /const qrUrl = .*#urgence=/)

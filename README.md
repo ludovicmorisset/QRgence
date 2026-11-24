@@ -5,10 +5,10 @@ Application web statique pour créer une carte d’urgence imprimable avec QR co
 ## Confidentialité
 
 - Aucun compte, formulaire serveur, base de données, cookie, stockage navigateur, outil d’analyse ou télémétrie.
-- Les données saisies ne sont pas incluses dans les requêtes HTTP. Le navigateur télécharge uniquement les ressources de l’application et le code de la bibliothèque QR.
+- Les données saisies ne sont pas incluses dans les requêtes HTTP. Le navigateur télécharge les ressources de l’application, le code de la bibliothèque QR et la police Commissioner depuis Google Fonts.
 - Le QR code contient les données de santé et de contact **en clair**. Ce n’est pas un chiffrement : toute personne qui le scanne peut les lire.
 - L’hébergeur web peut voir les requêtes ordinaires nécessaires au chargement du site (par exemple l’adresse IP, l’heure et les fichiers demandés). Configurez et vérifiez séparément la rétention des journaux du serveur et du proxy.
-- L’application ne dépend d’aucune ressource tierce à l’exécution.
+- La police Commissioner est chargée depuis Google Fonts. Google reçoit les requêtes normales nécessaires au chargement de la police et peut traiter les métadonnées de connexion conformément à ses propres règles.
 
 N’inscrivez que les informations nécessaires à une intervention. Toute personne détenant une copie de la carte peut scanner son QR code. Remplacez ou détruisez les anciennes copies lorsque les informations changent.
 
