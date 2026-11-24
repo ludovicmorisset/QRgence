@@ -1,5 +1,5 @@
 import QRCode from 'qrcode'
-import logoUrl from './logo.jpeg'
+import logoUrl from './logo.png'
 import faviconUrl from './favicon.ico'
 import iconSvgUrl from './icon.svg'
 import icon192Url from './icon-192.png'
