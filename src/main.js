@@ -33,7 +33,7 @@ function escapeHtml(value = '') {
 
 function encodeCard(data) {
   const bytes = new TextEncoder().encode(JSON.stringify(data))
-  return btoa(String.fromCharCode(...bytes)).replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '')
+  return btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
 function decodeCard(value) {
@@ -49,7 +49,7 @@ function decodeCard(value) {
 }
 
 function phoneHref(phone) {
-  const digits = phone.replace(/\\D/g, '')
+  const digits = phone.replace(/\D/g, '')
   return `tel:${phone.trim().startsWith('+') ? '+' : ''}${digits}`
 }
 
