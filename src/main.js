@@ -31,6 +31,38 @@ function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char])
 }
 
+function encodeCard(data) {
+  const bytes = new TextEncoder().encode(JSON.stringify(data))
+  return btoa(String.fromCharCode(...bytes)).replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '')
+}
+
+function decodeCard(value) {
+  try {
+    const base64 = value.replace(/-/g, '+').replace(/_/g, '/')
+    const bytes = Uint8Array.from(atob(base64.padEnd(Math.ceil(base64.length / 4) * 4, '=')), char => char.charCodeAt(0))
+    const data = JSON.parse(new TextDecoder().decode(bytes))
+    if (data.v !== 1 || typeof data.n !== 'string' || !Array.isArray(data.e) || !data.e.every(contact => contact && typeof contact.p === 'string')) return null
+    return data
+  } catch {
+    return null
+  }
+}
+
+function phoneHref(phone) {
+  const digits = phone.replace(/\\D/g, '')
+  return `tel:${phone.trim().startsWith('+') ? '+' : ''}${digits}`
+}
+
+function renderEmergencyPage(data) {
+  const health = [
+    ['Allergies', data.al],
+    ['Conditions médicales', data.c],
+    ['Médicaments', data.m],
+    ['Autre information', data.x],
+  ].filter(([, value]) => value)
+  app.innerHTML = `<style>.emergency-page{max-width:760px;min-height:100vh;margin:auto;padding:28px 24px 56px}.emergency-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px}.emergency-label{color:#85877f;font-size:10px;font-weight:700;letter-spacing:1.3px}.emergency-card{padding:clamp(24px,6vw,52px);border:1px solid #e9e8e1;border-radius:20px;background:#fffefa;box-shadow:0 16px 50px rgba(40,49,44,.06)}.emergency-card h1{margin:18px 0 12px;font:700 clamp(34px,8vw,52px)/1.08 Manrope,sans-serif;letter-spacing:-2px;overflow-wrap:anywhere}.emergency-meta{display:flex;flex-wrap:wrap;gap:10px;color:#647064}.emergency-meta span{padding:8px 12px;border-radius:20px;background:#f2f1eb}.emergency-meta strong{color:#28312c}.emergency-section{margin-top:34px}.emergency-section h2{margin:0 0 14px;font:700 16px Manrope,sans-serif}.emergency-section dl{margin:0}.emergency-section dl div{padding:14px 0;border-top:1px solid #e9e8e1}.emergency-section dt{margin-bottom:5px;color:#85877f;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}.emergency-section dd{margin:0;line-height:1.6;overflow-wrap:anywhere}.emergency-contact{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-top:1px solid #e9e8e1}.emergency-contact div,.emergency-doctor{display:grid;gap:5px}.emergency-contact div span{color:#85877f;font-size:12px}.emergency-contact a,.emergency-doctor a{color:#176b70;font-weight:700;overflow-wrap:anywhere}.emergency-contact a{padding:10px 14px;border-radius:10px;background:#e4f3f1;white-space:nowrap}.emergency-doctor{padding-top:14px;border-top:1px solid #e9e8e1}.emergency-foot{margin:34px 0 0;color:#85877f;font-size:12px;line-height:1.6}@media(max-width:480px){.emergency-page{padding:20px 14px 36px}.emergency-header{margin-bottom:28px}.emergency-card{border-radius:16px}.emergency-contact{align-items:flex-start;flex-direction:column}.emergency-contact a{max-width:100%;white-space:normal}}</style><main class="emergency-page"><header class="emergency-header"><a class="brand" href="./"><span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M13 5h6v8h8v6h-8v8h-6v-8H5v-6h8z" /></svg></span><span>QRgence<span class="brand-dot">.</span></span></a><span class="emergency-label">CARTE D'URGENCE</span></header><section class="emergency-card"><div class="eyebrow"><span class="eyebrow-line"></span> INFORMATIONS MÉDICALES</div><h1>${escapeHtml(data.n)}</h1><div class="emergency-meta">${data.a ? `<span>${escapeHtml(data.a)} ans</span>` : ''}<span>Groupe sanguin <strong>${escapeHtml(data.b || 'Non renseigné')}</strong></span></div>${health.length ? `<section class="emergency-section"><h2>À savoir</h2><dl>${health.map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl></section>` : ''}<section class="emergency-section emergency-contacts"><h2>Contacts à prévenir</h2>${data.e.map(contact => `<article class="emergency-contact"><div><strong>${escapeHtml(contact.n || 'Contact d’urgence')}</strong>${contact.r ? `<span>${escapeHtml(contact.r)}</span>` : ''}</div><a href="${escapeHtml(phoneHref(contact.p))}">${escapeHtml(contact.p)}</a></article>`).join('')}</section>${data.d ? `<section class="emergency-section"><h2>Médecin</h2><div class="emergency-doctor"><strong>${escapeHtml(data.d)}</strong>${data.dp ? `<a href="${escapeHtml(phoneHref(data.dp))}">${escapeHtml(data.dp)}</a>` : ''}</div></section>` : ''}<p class="emergency-foot">Ces informations sont fournies par la personne porteuse de cette carte.</p></section></main>`
+}
+
 function input(label, key, placeholder = '', type = 'text') {
   return `<label class="field"><span>${label}</span><input data-key="${key}" type="${type}" value="${escapeHtml(state[key])}" placeholder="${placeholder}" autocomplete="off" /></label>`
 }
@@ -142,24 +174,13 @@ async function createCard() {
     phone?.addEventListener('input', () => phone.setCustomValidity(''), { once: true })
     return
   }
-  const qrText = [
-    'POCHE — CARTE D’URGENCE',
-    `NOM : ${cardData.n}`,
-    cardData.a ? `ÂGE : ${cardData.a} ans` : '',
-    `GROUPE SANGUIN : ${cardData.b || 'non renseigné'}`,
-    cardData.al ? `ALLERGIES : ${cardData.al}` : '',
-    cardData.c ? `CONDITIONS : ${cardData.c}` : '',
-    cardData.m ? `MÉDICAMENTS : ${cardData.m}` : '',
-    cardData.x ? `AUTRE : ${cardData.x}` : '',
-    ...cardData.e.map((contact, index) => `CONTACT ${index + 1} : ${[contact.n, contact.r].filter(Boolean).join(' — ')}${contact.p ? ` · ${contact.p}` : ''}`),
-    cardData.d ? `MÉDECIN : ${cardData.d}${cardData.dp ? ` · ${cardData.dp}` : ''}` : '',
-  ].filter(Boolean).join('\n')
-  if (qrText.length > 1800) {
+  const qrUrl = `${window.location.origin}${window.location.pathname}#urgence=${encodeCard(cardData)}`
+  if (qrUrl.length > 1800) {
     window.alert('Les informations sont trop longues pour un QR code fiable. Raccourcissez les champs santé puis réessayez.')
     return
   }
   try {
-    state.qr = await QRCode.toDataURL(qrText, { errorCorrectionLevel: 'M', margin: 2, width: 320, color: { dark: '#18261f', light: '#ffffff' } })
+    state.qr = await QRCode.toDataURL(qrUrl, { errorCorrectionLevel: 'M', margin: 2, width: 320, color: { dark: '#18261f', light: '#ffffff' } })
     state.resultData = cardData
     render()
     showResult(cardData)
@@ -231,5 +252,8 @@ async function downloadCard() {
   link.href = canvas.toDataURL('image/png')
   link.click()
 }
+const emergencyMatch = window.location.hash.match(/^#urgence=([A-Za-z0-9_-]+)$/)
+const emergencyData = emergencyMatch ? decodeCard(emergencyMatch[1]) : null
 
-render()
+if (emergencyData) renderEmergencyPage(emergencyData)
+else render()
