@@ -1,0 +1,27 @@
+name: Signaler un bug
+description: Décrire un problème reproductible sans données personnelles
+body:
+  - type: markdown
+    attributes:
+      value: |
+        N’incluez aucune donnée réelle (nom, numéro, information médicale), ni capture contenant une carte personnelle.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Résumé
+      description: Que s’est-il passé ?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Étapes pour reproduire
+      description: Utilisez uniquement des données fictives.
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Navigateur et version
+    validations:
+      required: false

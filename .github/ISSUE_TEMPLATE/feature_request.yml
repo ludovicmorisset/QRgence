@@ -1,0 +1,20 @@
+name: Proposer une amélioration
+description: Suggérer une fonctionnalité compatible avec la confidentialité
+body:
+  - type: markdown
+    attributes:
+      value: |
+        N’incluez aucune donnée personnelle ou médicale. Les propositions ne doivent pas nécessiter l’envoi ou le stockage des données de carte.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Besoin
+      description: Quel problème cette amélioration résout-elle ?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution proposée
+    validations:
+      required: true
